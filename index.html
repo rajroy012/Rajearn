@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raj Earn</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#f7efe8;
+max-width:420px;
+margin:auto;
+overflow:hidden;
+}
+
+.page{display:none;height:100vh}
+.active{display:block}
+
+.banner{padding:20px;font-size:30px;font-weight:bold}
+
+.card{
+background:#fff;
+margin:10px;
+padding:15px;
+border-radius:20px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+.input{
+background:#f5d6c6;
+border-radius:25px;
+padding:10px;
+margin:10px 0;
+}
+
+.input input{
+border:none;
+background:none;
+width:100%;
+outline:none;
+}
+
+.btn{
+background:linear-gradient(90deg,#ff6a00,#ffb347);
+padding:12px;
+border-radius:25px;
+text-align:center;
+color:white;
+margin-top:10px;
+}
+
+/* NAV */
+.bottom{
+position:fixed;
+bottom:0;
+width:100%;
+max-width:420px;
+height:60px;
+display:flex;
+justify-content:space-around;
+align-items:center;
+background:white;
+border-top:1px solid #ccc;
+}
+
+.centerBtn{
+position:absolute;
+top:-25px;
+background:#ff6a00;
+width:60px;
+height:60px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:22px;
+box-shadow:0 5px 10px rgba(0,0,0,0.2);
+}
+
+.tab{
+display:none;
+height:calc(100vh - 60px);
+}
+.tab.active{display:block}
+
+.menu{padding:12px;border-bottom:1px solid #eee}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="page active">
+<div class="banner">Hello!</div>
+
+<div class="card">
+<div class="input"><input id="lEmail" placeholder="Email"></div>
+<div class="input"><input id="lPass" placeholder="Password"></div>
+
+<div class="btn" onclick="login()">Login</div>
+</div>
+</div>
+
+<!-- APP -->
+<div id="app" class="page">
+
+<!-- HOME -->
+<div id="home" class="tab active">
+
+<div style="display:flex;justify-content:space-between;padding:15px;">
+<div>🌐 Languages</div>
+
+<div>
+<div style="background:#ff6a00;color:white;padding:5px 12px;border-radius:20px;">
+₹ <span id="bal">0</span>
+</div>
+<div style="font-size:12px;color:#ff6a00;">Withdrawal</div>
+</div>
+</div>
+
+<!-- BANNER -->
+<div style="background:linear-gradient(90deg,#ff6a00,#ffb347);color:white;margin:10px;border-radius:20px;padding:20px;">
+<h2>Raj Earn</h2>
+<p>Revenue Leaderboard</p>
+</div>
+
+<!-- TASK -->
+<div class="card">
+<h3>Scan Code Tasks</h3>
+
+<div style="display:flex;justify-content:space-between;margin-top:10px;">
+<div style="background:#00c853;color:white;padding:10px;border-radius:50%;">₹12</div>
+<div style="background:#00c853;color:white;padding:10px;border-radius:50%;">₹25</div>
+<div style="background:#00c853;color:white;padding:10px;border-radius:50%;">₹55</div>
+<div style="background:#ccc;padding:10px;border-radius:50%;">₹120</div>
+<div style="background:#ccc;padding:10px;border-radius:50%;">₹145</div>
+</div>
+
+<div class="btn" onclick="earn()">Start Task</div>
+</div>
+
+</div>
+
+<!-- INVITE -->
+<div id="invite" class="tab">
+<div class="card">
+<h3>Invite Scan QR</h3>
+<p style="color:#ff6a00;">Earn ₹10 per referral</p>
+</div>
+</div>
+
+<!-- ME -->
+<div id="me" class="tab">
+
+<div class="card" style="display:flex;justify-content:space-between;">
+<div>
+<h3 id="user"></h3>
+<p>ID: <span id="uid"></span></p>
+</div>
+<div style="color:#ff6a00;">Ranking List ></div>
+</div>
+
+<div class="card" style="background:linear-gradient(90deg,#ff6a00,#ffb347);color:white;position:relative;">
+<h2>₹ <span id="bal2">0</span></h2>
+<p>Account Balance</p>
+
+<div onclick="openTab('withdraw')" style="position:absolute;right:15px;top:15px;background:white;color:#ff6a00;padding:6px 12px;border-radius:20px;">
+Withdrawal
+</div>
+</div>
+
+<div class="card">
+<div class="menu" onclick="openTab('revenue')">Revenue details ></div>
+<div class="menu" onclick="openTab('wdhistory')">Withdrawal details ></div>
+<div class="menu" onclick="openTab('system')">System Message ></div>
+<div class="menu" onclick="openTab('changepass')">Change Password ></div>
+<div class="menu">My lower level ></div>
+<div class="menu" onclick="logout()">Log out</div>
+</div>
+
+</div>
+
+<!-- EXTRA -->
+<div id="revenue" class="tab"><div class="card">Revenue Details</div></div>
+<div id="wdhistory" class="tab"><div class="card">Withdrawal Details</div></div>
+<div id="system" class="tab"><div class="card">System Message</div></div>
+
+<div id="changepass" class="tab">
+<div class="card">
+<input id="newpass" placeholder="New Password">
+<div class="btn" onclick="changePass()">Update</div>
+</div>
+</div>
+
+<div id="withdraw" class="tab">
+<div class="card">
+<h3>Withdraw</h3>
+
+<input placeholder="Name">
+<input placeholder="Account Number">
+<input placeholder="IFSC">
+
+<select id="amt">
+<option value="">Select</option>
+<option value="120">120₹</option>
+<option value="230">230₹</option>
+<option value="550">550₹</option>
+<option value="1000">1000₹</option>
+</select>
+
+<div class="btn" onclick="withdraw()">Submit</div>
+</div>
+</div>
+
+<!-- NAV -->
+<div class="bottom">
+<div onclick="openTab('home')">🏠</div>
+<div class="centerBtn" onclick="openTab('invite')">➕</div>
+<div onclick="openTab('me')">👤</div>
+</div>
+
+</div>
+
+<script>
+
+let user={};
+
+function login(){
+user={email:lEmail.value,bal:0,id:Math.floor(Math.random()*999999)};
+localStorage.setItem("user",JSON.stringify(user));
+load();
+openPage("app");
+}
+
+function load(){
+user=JSON.parse(localStorage.getItem("user"));
+document.getElementById("user").innerText=user.email;
+document.getElementById("uid").innerText=user.id;
+document.getElementById("bal").innerText=user.bal;
+document.getElementById("bal2").innerText=user.bal;
+}
+
+function openPage(p){
+document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+document.getElementById(p).classList.add('active');
+}
+
+function openTab(t){
+document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+document.getElementById(t).classList.add('active');
+}
+
+function earn(){
+user.bal+=2;
+save();
+}
+
+function withdraw(){
+let amt=parseInt(document.getElementById("amt").value);
+if(user.bal<amt){alert("Low balance");return;}
+user.bal-=amt;
+save();
+alert("Withdraw done");
+openTab("me");
+}
+
+function changePass(){
+user.pass=newpass.value;
+localStorage.setItem("user",JSON.stringify(user));
+alert("Password Updated");
+openTab("me");
+}
+
+function save(){
+localStorage.setItem("user",JSON.stringify(user));
+load();
+}
+
+function logout(){
+location.reload();
+}
+
+</script>
+
+</body>
+  </html>
